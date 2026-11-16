@@ -15,19 +15,22 @@ section .data
 section .text
 start:
     ; Esperar a que BUSY#=1 (bit 7 de 0379h: impresora lista)
+    mov dx, LPT_STATUS_PORT
 .wait_ready:
-    in  al, LPT_STATUS_PORT
+    in  al, dx
     test al, LPT_BUSY_MASK
     jz  .wait_ready
 
     ; Colocar el dato en el registro de datos 0378h
+    mov dx, LPT_DATA_PORT
     mov al, CHAR_ENVIO
-    out LPT_DATA_PORT, al
+    out dx, al
 
     ; Generar pulso STROBE# (bit 0 del registro de control 037Ah, activo en bajo)
-    in  al, LPT_CTRL_PORT
+    mov dx, LPT_CTRL_PORT
+    in  al, dx
     and al, 0FEh                    ; STROBE# = 0 (activo)
-    out LPT_CTRL_PORT, al
+    out dx, al
 
     ; Retardo minimo (>1 us en DOSBox)
     mov cx, 000Fh
@@ -35,7 +38,7 @@ start:
     loop .delay
 
     or  al, 01h                     ; STROBE# = 1 (inactivo)
-    out LPT_CTRL_PORT, al
+    out dx, al
 
     mov ah, 09h
     mov dx, msg_ok

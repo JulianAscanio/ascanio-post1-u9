@@ -14,14 +14,16 @@ section .data
 
 section .text
 start:
+    mov dx, LPT_STATUS_PORT
+
 .poll:
     ; Bandera de teclado: bit 0 (OBF) del puerto 64h
     in  al, KB_STATUS_PORT
     and al, KB_OBF_MASK
     mov bl, al                      ; BL = bandera_teclado (0 o 1)
 
-    ; Bandera de LPT1: bit 7 (BUSY#) del puerto 0379h
-    in  al, LPT_STATUS_PORT
+    ; Bandera de LPT1: bit 7 (BUSY#) del puerto 0379h (via DX)
+    in  al, dx
     and al, LPT_BUSY_MASK
     shr al, 7                       ; normalizar a 0 o 1
     mov bh, al                      ; BH = bandera_lpt1 (0 o 1)
