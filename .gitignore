@@ -1,0 +1,20 @@
+# Herramientas binarias DOS (se montan localmente)
+debug.exe
+nasm.exe
+
+# Carpeta de capturas internas de DOSBox y script local
+capture/
+capture_u9.py
+__pycache__/
+
+# Archivos temporales y de depuración
+*.obj
+*.lst
+*.log
+*.tmp
+*.swp
+*~
+
+# Entorno de desarrollo
+.vscode/
+.idea/
