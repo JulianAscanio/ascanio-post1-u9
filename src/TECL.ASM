@@ -18,6 +18,9 @@ start:
     mov dx, msg_prompt
     int 21h
 
+    ; Deshabilitar interrupciones para que INT 09h del BIOS no consuma el scancode
+    cli
+
     ; Vaciar cualquier dato previo antes de esperar la nueva pulsacion
     in  al, KB_STATUS_PORT
     test al, KB_OBF_MASK
@@ -31,6 +34,7 @@ start:
     jz  .poll
 
     in  al, KB_DATA_PORT
+    sti                             ; rehabilitar interrupciones
     mov bl, al                      ; guardar scancode en BL
 
     mov ah, 09h
